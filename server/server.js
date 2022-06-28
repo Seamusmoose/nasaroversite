@@ -1,6 +1,8 @@
 const puppeteer = require("puppeteer");
+const express = require("express");
+const app = express();
 
-(async () => {
+app.get("/weather", async (req, res) => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto("https://mars.nasa.gov/msl/weather/");
@@ -9,18 +11,23 @@ const puppeteer = require("puppeteer");
     let items = [...document.querySelectorAll(".item")];
     return items.map((item) => {
       const newMap = new Map();
-      newMap["Sol"] = item.childNodes[0].innerText;
+      newMap["Sol"] = item.childNodes[0].innerText.split(" ").pop();
       newMap["Date"] = item.childNodes[1].innerText;
-      newMap["High"] = item.childNodes[4].innerText.split("C")[0];
-      newMap["Low"] = item.childNodes[4].innerText.split("C")[1];
+      newMap["High"] = item.childNodes[4].innerText
+        .split("C")[0]
+        .split(" ")
+        .pop();
+      newMap["Low"] = item.childNodes[4].innerText
+        .split("C")[1]
+        .split(" ")
+        .pop();
       return newMap;
-
-      // const Date = item.childNodes[1].innerText;
-      // const High = item.childNodes[5].innerText;
-      // const Low = item.childNodes[6].innerText;
     });
   });
 
-  console.log(grabInfo, "INFO");
+  console.log(grabInfo, "in");
+  res.json(grabInfo);
   await browser.close();
-})();
+});
+
+app.listen(5000);
