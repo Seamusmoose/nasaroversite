@@ -4,16 +4,6 @@ import axios from "axios";
 const MarsWeather = () => {
   const [weatherData, setWeatherData] = useState([]);
 
-  // useEffect(() => {
-  //   fetch("/weather")
-  //     .then((res) => {
-  //       if (res.ok) return res.json();
-  //     })
-  //     .then((jsonRes) => setWeatherData(jsonRes));
-  // }, []);
-
-  // const weatherURL = `https://api.maas2.apollorion.com/`;
-
   useEffect(() => {
     const fetchWeatherData = async () => {
       const { data } = await axios.get("/weather");
@@ -23,24 +13,30 @@ const MarsWeather = () => {
     fetchWeatherData();
   }, []);
 
-  // console.log(weatherData, "weatherdata");
+  let test = [];
+
+  weatherData.forEach((item) => {
+    test.push([...Object.entries(item)]);
+  });
+
   return (
     <div>
       <h1>Last recorded Mars Weather with Curiosty Rover</h1>
-      <div>
+      <div className="weather">
         {weatherData.length === 0 ? (
           <h1>...Loading</h1>
         ) : (
-          weatherData.map((data, i) => {
-            console.log(data, i);
-            // return Object.values(data).map((w, i) => {
-            //   console.log(w);
-            //   return (
-            //     <ul key={w}>
-            //       <li>{w}</li>
-            //     </ul>
-            //   );
-            // });
+          test.map((item, i) => {
+            return (
+              <div key={i}>
+                <div className="items">
+                  <h3>{item[0].join(": ")}</h3>
+                  <h3>{item[1].join(": ")}</h3>
+                  <h3>{item[2].join(": ")}</h3>
+                  <h3>{item[3].join(": ")}</h3>
+                </div>
+              </div>
+            );
           })
         )}
       </div>

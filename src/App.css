@@ -1,0 +1,10 @@
+.weather {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.items {
+  width: 150px;
+  border: solid;
+}
