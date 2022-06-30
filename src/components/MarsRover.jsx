@@ -147,7 +147,7 @@ const MarsRover = (props) => {
         onChange={handleDateChange}
       />
       <div className="gridContainer">
-        {filterData === []
+        {filterData.length === 0
           ? roverData.slice(0, size).map((photo, index) => {
               return (
                 <div key={index}>
