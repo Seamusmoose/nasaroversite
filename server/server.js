@@ -2,14 +2,12 @@ const puppeteer = require("puppeteer");
 const path = require('path');
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const port = process.env.PORT || 5000;
 
-const publicPath = path.join(__dirname, '..', 'public');
-app.use(express.static(publicPath));
+require('dotenv').config();
 
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(publicPath, 'index.html'));
-// });
 
 app.get("/weather", async (req, res) => {
   const browser = await puppeteer.launch({ headless: true });
@@ -48,5 +46,35 @@ app.get("/weather", async (req, res) => {
   await newPage.close();
 });
 
-app.listen(port);
+// Configure the bodyParser middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
+// Configure the CORs middleware
+app.use(cors());
+
+// This middleware informs the express application to serve our compiled React files
+if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
+    app.use(express.static(path.join(__dirname, 'client/build')));
+
+    app.get('*', function (req, res) {
+        res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    });
+};
+
+
+process.on('uncaughtException', function (err) {
+  console.log(err);
+});
+// Catch any bad requests
+app.get('*', (req, res) => {
+    res.status(200).json({
+        msg: 'Catch All'
+    });
+});
+
+// Configure our server to listen on the port defiend by our port variable
+app.listen(port, () => console.log(`BACK_END_SERVICE_PORT: ${port}`));
 
