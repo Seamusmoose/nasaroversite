@@ -1,14 +1,14 @@
 const puppeteer = require("puppeteer");
-const express = require("express");
-const app = express();
-
-
-const apth = require('path');
+const path = require('path');
+const express = require('express');
 const port = process.env.PORT || 5000;
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static('client/build'))
-}
+const publicPath = path.join(__dirname, '..', 'public');
+app.use(express.static(publicPath));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
 
 app.get("/weather", async (req, res) => {
   const browser = await puppeteer.launch({ headless: true });
@@ -47,6 +47,6 @@ app.get("/weather", async (req, res) => {
   await newPage.close();
 });
 
-app.listen(port);
+app.listen(PORT);
 
 // "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
