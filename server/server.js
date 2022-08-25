@@ -1,6 +1,6 @@
 const puppeteer = require("puppeteer");
 const path = require('path');
-const express = require('express');
+const app = require('express');
 const port = process.env.PORT || 5000;
 
 const publicPath = path.join(__dirname, '..', 'public');
