@@ -1,6 +1,7 @@
 const puppeteer = require("puppeteer");
 const path = require('path');
-const app = require('express');
+const express = require('express');
+const app = express();
 const port = process.env.PORT || 5000;
 
 const publicPath = path.join(__dirname, '..', 'public');
@@ -47,6 +48,6 @@ app.get("/weather", async (req, res) => {
   await newPage.close();
 });
 
-app.listen(PORT);
+app.listen(port);
 
 // "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
