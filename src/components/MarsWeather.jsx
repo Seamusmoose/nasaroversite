@@ -4,6 +4,8 @@ import axios from "axios";
 const MarsWeather = () => {
   const [weatherData, setWeatherData] = useState([]);
 
+  console.log(weatherData);
+
   useEffect(() => {
     const fetchWeatherData = async () => {
       const { data } = await axios.get("/weather");

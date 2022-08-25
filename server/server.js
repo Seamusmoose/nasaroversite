@@ -7,9 +7,9 @@ const port = process.env.PORT || 5000;
 const publicPath = path.join(__dirname, '..', 'public');
 app.use(express.static(publicPath));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
-});
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(publicPath, 'index.html'));
+// });
 
 app.get("/weather", async (req, res) => {
   const browser = await puppeteer.launch({ headless: true });
@@ -50,4 +50,3 @@ app.get("/weather", async (req, res) => {
 
 app.listen(port);
 
-// "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
