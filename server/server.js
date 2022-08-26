@@ -5,8 +5,16 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const port = process.env.PORT || 5000;
-
 require('dotenv').config();
+
+// This middleware informs the express application to serve our compiled React files
+if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
+  app.use(express.static(path.join(__dirname, 'client/build')));
+
+  app.get('*', function (req, res) {
+      res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  });
+};
 
 
 app.get("/weather", async (req, res) => {
@@ -55,19 +63,9 @@ app.use(bodyParser.urlencoded({
 // Configure the CORs middleware
 app.use(cors());
 
-// This middleware informs the express application to serve our compiled React files
-if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
-    app.use(express.static(path.join(__dirname, 'client/build')));
-
-    app.get('*', function (req, res) {
-        res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-    });
-};
 
 
-process.on('uncaughtException', function (err) {
-  console.log(err);
-});
+
 // Catch any bad requests
 app.get('*', (req, res) => {
     res.status(200).json({
